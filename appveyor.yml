@@ -1,0 +1,22 @@
+image: Visual Studio 2017
+install:
+  - choco install gitversion.portable -y
+
+before_build:
+  - cmd: dotnet --version
+  - ps: gitversion /l console /output buildserver
+
+build_script:
+  - ps: dotnet msbuild /t:Restore /t:Build /p:Configuration=Release /p:Version=$env:GitVersion_NuGetVersion src/
+  
+test_script:
+  - ps: dotnet test --configuration Release --no-build $(Resolve-Path ".\src\*.UnitTests\*.csproj")
+
+artifacts:
+- path: artifacts/*/*.nupkg
+
+deploy:
+  provider: Environment
+  name: nuget.org
+  on:
+    appveyor_repo_tag: true
