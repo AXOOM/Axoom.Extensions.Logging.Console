@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axoom.Extensions.Logging.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axoom.Extensions.Logging.Console.UnitTests", "Axoom.Extensions.Logging.Console.UnitTests\Axoom.Extensions.Logging.Console.UnitTests.csproj", "{F709D42E-FD0A-467B-957E-C65768A537BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__docs", "__docs", "{A002E820-D264-41D0-8781-B08256E940B0}"
+ProjectSection(SolutionItems) = preProject
+	..\readme.md = ..\readme.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
