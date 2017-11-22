@@ -26,7 +26,7 @@ To use the AXOOM logging provider call the provider's extension method on an ins
 public void ConfigureLogging(IServiceProvider serviceProvider)
 {
     var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-    loggerFactory.AddConsole(new ConsoleLoggerOptions());
+    loggerFactory.AddAxoomConsole(new ConsoleLoggerOptions());
 }
 ```
 

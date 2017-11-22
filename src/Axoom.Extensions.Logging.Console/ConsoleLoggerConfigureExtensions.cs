@@ -16,12 +16,12 @@ namespace Axoom.Extensions.Logging.Console
         /// Adds a console logger to the <paramref name="builder"/>.
         /// </summary>
         /// <param name="builder">The <see cref="ILoggingBuilder"/> to use.</param>
-        public static ILoggingBuilder AddConsole(this ILoggingBuilder builder) => AddConsole(builder, new ConsoleLoggerOptions());
+        public static ILoggingBuilder AddAxoomConsole(this ILoggingBuilder builder) => AddAxoomConsole(builder, new ConsoleLoggerOptions());
 
         /// <summary>
         /// Adds a console logger with the given <paramref name="options"/> to the <paramref name="builder"/>.
         /// </summary>
-        public static ILoggingBuilder AddConsole([NotNull] this ILoggingBuilder builder, [NotNull] ConsoleLoggerOptions options)
+        public static ILoggingBuilder AddAxoomConsole([NotNull] this ILoggingBuilder builder, [NotNull] ConsoleLoggerOptions options)
         {
             SetupLayoutRenderers();
             builder.AddNLog();
@@ -33,12 +33,12 @@ namespace Axoom.Extensions.Logging.Console
         /// <summary>
         /// Adds a console logger to the <paramref name="factory"/>.
         /// </summary>
-        public static ILoggerFactory AddConsole(this ILoggerFactory factory) => AddConsole(factory, new ConsoleLoggerOptions());
+        public static ILoggerFactory AddAxoomConsole(this ILoggerFactory factory) => AddAxoomConsole(factory, new ConsoleLoggerOptions());
 
         /// <summary>
         /// Adds a console logger with the given <paramref name="options"/> to the <paramref name="factory"/>.
         /// </summary>
-        public static ILoggerFactory AddConsole([NotNull] this ILoggerFactory factory, [NotNull] ConsoleLoggerOptions options)
+        public static ILoggerFactory AddAxoomConsole([NotNull] this ILoggerFactory factory, [NotNull] ConsoleLoggerOptions options)
         {
             if (factory == null) throw new ArgumentNullException(nameof(factory));
             if (options == null) throw new ArgumentNullException(nameof(options));

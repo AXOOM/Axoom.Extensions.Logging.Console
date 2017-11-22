@@ -19,7 +19,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
         public GelfLayoutFacts()
         {
-            new LoggerFactory().AddConsole();
+            new LoggerFactory().AddAxoomConsole();
             
             _layout = new GelfLayout();
             _logEventInfo = new LogEventInfo(LogLevel.Debug, "MyLogger", "MyMessage")

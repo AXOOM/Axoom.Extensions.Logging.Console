@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Axoom.Extensions.Logging.Console.LayoutRenderers;
 using Axoom.Extensions.Logging.Console.Layouts;
 using FluentAssertions;
@@ -23,34 +25,34 @@ namespace Axoom.Extensions.Logging.Console
         {
             _loggerFactory = new LoggerFactory();
         }
-        
+
         [Fact]
         public void AddingConsoleRegistersSysLogLevelLayoutRenderer()
         {
-            _loggerFactory.AddConsole();
+            _loggerFactory.AddAxoomConsole();
 
             ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("sysloglevel", out Type type);
-            
+
             type.ShouldBeEquivalentTo(typeof(SysLogLevelLayoutRenderer));
         }
-        
+
         [Fact]
         public void AddingConsoleRegistersUnixTimeLayoutRenderer()
         {
-            _loggerFactory.AddConsole();
+            _loggerFactory.AddAxoomConsole();
 
             ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("unixtime", out Type type);
-            
+
             type.ShouldBeEquivalentTo(typeof(UnixTimeLayoutRenderer));
         }
 
         [Fact]
         public void AddingConsoleThrowsArgumentNullException()
         {
-            Action addingWithNullFactory = () => ConsoleLoggerConfigureExtensions.AddConsole(factory: null, options: new ConsoleLoggerOptions());
+            Action addingWithNullFactory = () => ConsoleLoggerConfigureExtensions.AddAxoomConsole(factory: null, options: new ConsoleLoggerOptions());
             addingWithNullFactory.ShouldThrow<ArgumentNullException>();
-            
-            Action addingWithNullOptions = () => _loggerFactory.AddConsole(options: null);
+
+            Action addingWithNullOptions = () => _loggerFactory.AddAxoomConsole(options: null);
             addingWithNullOptions.ShouldThrow<ArgumentNullException>();
         }
 
@@ -60,33 +62,20 @@ namespace Axoom.Extensions.Logging.Console
             var factoryMock = new Mock<ILoggerFactory>();
             ILoggerFactory factory = factoryMock.Object;
 
-            factory.AddConsole();
-            
+            factory.AddAxoomConsole();
+
             factoryMock.Verify(mock => mock.AddProvider(It.IsAny<NLogLoggerProvider>()));
         }
 
         [Fact]
         public void AddingConsoleHidesOwnCallsite()
         {
-            ILoggerFactory loggerFactory = new LoggerFactory().AddConsole();
-            var memoryTarget = new MemoryTarget("test-target") {Layout = new GelfLayout()};
-            LogManager.Configuration.AddTarget(memoryTarget);
-            LogManager.Configuration.AddRuleForAllLevels(memoryTarget);
-            LogManager.ReconfigExistingLoggers();
-            ILogger logger = loggerFactory.CreateLogger("test");
-            
-            logger.LogInformation(new Exception(), "test");
-            LogManager.Flush();
-            
-            var logLine = JsonConvert.DeserializeObject<GelfFormat>(memoryTarget.Logs.First());
+            new LoggerFactory().AddAxoomConsole();
 
-            logLine.Callsite.Should().Be($"{nameof(ConsoleLoggerConfigureExtensionsFacts)}.{nameof(AddingConsoleHidesOwnCallsite)}");
-        }
-
-        private class GelfFormat
-        {
-            [JsonProperty("_callsite")]
-            public string Callsite { get; set; }
+            var hiddenAssemblies =
+                (ICollection<Assembly>) typeof(LogManager).GetField("_hiddenAssemblies", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            
+            hiddenAssemblies.Should().Contain(Assembly.Load(new AssemblyName("Axoom.Extensions.Logging.Console")));
         }
     }
 }
