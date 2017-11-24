@@ -2,6 +2,7 @@
 using System.Reflection;
 using Axoom.Extensions.Logging.Console.LayoutRenderers;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
@@ -35,6 +36,12 @@ namespace Axoom.Extensions.Logging.Console
         /// </summary>
         public static ILoggerFactory AddAxoomConsole(this ILoggerFactory factory) => AddAxoomConsole(factory, new ConsoleLoggerOptions());
 
+        /// <summary>
+        /// Adds a console logger with the given <paramref name="configuration"/> to the <paramref name="factory"/>.
+        /// </summary>
+        public static ILoggerFactory AddAxoomConsole([NotNull] this ILoggerFactory factory, [NotNull] IConfiguration configuration)
+            => AddAxoomConsole(factory, new ConsoleLoggerOptions(configuration));
+        
         /// <summary>
         /// Adds a console logger with the given <paramref name="options"/> to the <paramref name="factory"/>.
         /// </summary>
