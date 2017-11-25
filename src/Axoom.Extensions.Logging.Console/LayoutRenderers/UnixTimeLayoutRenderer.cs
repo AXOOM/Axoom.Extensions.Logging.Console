@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using JetBrains.Annotations;
 using NLog;
@@ -12,13 +13,16 @@ namespace Axoom.Extensions.Logging.Console.LayoutRenderers
     [UsedImplicitly]
     internal class UnixTimeLayoutRenderer : LongDateLayoutRenderer
     {
+        private static readonly NumberFormatInfo _numberFormat = new NumberFormatInfo{NumberDecimalSeparator = "."};
+        
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             DateTime dateTime = logEvent.TimeStamp;
             if (UniversalTime)
                 dateTime = dateTime.ToUniversalTime();
 
-            builder.Append(((DateTimeOffset) dateTime).ToUnixTimeSeconds());
+            double timestamp = ((DateTimeOffset) dateTime).ToUnixTimeMilliseconds() / 1000d;
+            builder.Append(timestamp.ToString(_numberFormat));
         }
     }
 }
