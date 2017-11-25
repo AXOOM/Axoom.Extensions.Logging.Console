@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Axoom.Extensions.Logging.Console.LayoutRenderers;
-using Axoom.Extensions.Logging.Console.Layouts;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NLog;
 using NLog.Config;
 using NLog.Extensions.Logging;
-using NLog.Targets;
 using Xunit;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Axoom.Extensions.Logging.Console
 {

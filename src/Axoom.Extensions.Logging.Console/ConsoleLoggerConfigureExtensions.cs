@@ -25,7 +25,7 @@ namespace Axoom.Extensions.Logging.Console
         public static ILoggingBuilder AddAxoomConsole([NotNull] this ILoggingBuilder builder, [NotNull] ConsoleLoggerOptions options)
         {
             SetupLayoutRenderers();
-            builder.AddNLog();
+            builder.AddNLog(options.GetNlogProviderOptions());
             SetupNlogConfig(options);
 
             return builder;
@@ -51,7 +51,7 @@ namespace Axoom.Extensions.Logging.Console
             if (options == null) throw new ArgumentNullException(nameof(options));
 
             SetupLayoutRenderers();
-            factory.AddNLog();
+            factory.AddNLog(options.GetNlogProviderOptions());
             SetupNlogConfig(options);
 
             return factory;

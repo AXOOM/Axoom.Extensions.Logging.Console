@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
+using NLog;
 using NLog.Layouts;
 
 namespace Axoom.Extensions.Logging.Console.Layouts
@@ -7,6 +10,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
     {
         public GelfLayout()
         {
+            IncludeMdlc = true;
             Attributes.Add(new JsonAttribute("version", "1.1"));
             Attributes.Add(new JsonAttribute("host", Environment.MachineName));
             Attributes.Add(new JsonAttribute("short_message", LayoutFormats.MESSAGE));
@@ -20,6 +24,33 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             Attributes.Add(new JsonAttribute("_exception_type", LayoutFormats.EXCEPTION_TYPE));
             Attributes.Add(new JsonAttribute("_exception_message", LayoutFormats.EXCEPTION_MESSAGE));
             Attributes.Add(new JsonAttribute("_exception_stacktrace", LayoutFormats.EXCEPTION_STACKTRACE, encode: true));
+        }
+
+        protected override void RenderFormattedMessage(LogEventInfo logEvent, StringBuilder target)
+        {
+            EnforceSnakeCasedAdditionalFieldNames();
+            base.RenderFormattedMessage(logEvent, target);
+        }
+
+        private static void EnforceSnakeCasedAdditionalFieldNames()
+        {
+            ICollection<string> fieldNames = MappedDiagnosticsLogicalContext.GetNames();
+            foreach (string fieldName in fieldNames)
+            {
+                string newFieldName = fieldName.ToSnakeCase();
+
+                if (newFieldName.Equals(fieldName))
+                    return;
+                
+                RewriteFieldName(fieldName, newFieldName);
+            }
+        }
+
+        private static void RewriteFieldName(string fieldName, string newFieldName)
+        {
+            object fieldValue = MappedDiagnosticsLogicalContext.GetObject(fieldName);
+            MappedDiagnosticsLogicalContext.Remove(fieldName);
+            MappedDiagnosticsLogicalContext.Set(newFieldName, fieldValue);
         }
     }
 }

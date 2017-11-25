@@ -1,6 +1,6 @@
 ﻿namespace Axoom.Extensions.Logging.Console.Layouts
 {
-    internal class LayoutFormats
+    internal static class LayoutFormats
     {
         public const string TIMESTAMP = "${date:universalTime=true:format=o}";
         public const string TIMESTAMP_UNIX = "${unixtime:universalTime=true}";

@@ -20,7 +20,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         public GelfLayoutFacts()
         {
             new LoggerFactory().AddAxoomConsole();
-            
+
             _layout = new GelfLayout();
             _logEventInfo = new LogEventInfo(LogLevel.Debug, "MyLogger", "MyMessage")
             {
@@ -106,16 +106,48 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             gelfMessage.Properties().ToList().ForEach(prop => prop.Name.Should().StartWith("_", "additional fields have to start with an underscore"));
         }
-        
+
         [Fact]
         public void AdditionalFieldsHaveValidNames()
         {
             var regex = new Regex(@"^[\w\-]*$");
-            
+
             string output = _layout.Render(_logEventInfo);
 
             var gelfMessage = JsonConvert.DeserializeObject<JObject>(output);
-            gelfMessage.Properties().ToList().ForEach(prop => prop.Name.Should().MatchRegex(regex.ToString(), "additional fields have to match the regex pattern"));
+            gelfMessage.Properties()
+                       .ToList()
+                       .ForEach(prop => prop.Name.Should().MatchRegex(regex.ToString(), "additional fields have to match the regex pattern"));
+        }
+
+        [Fact]
+        public void AddedScopeFieldsAreWrittenToGelf()
+        {
+            var gelfLayout = new GelfLayout();
+            MappedDiagnosticsLogicalContext.Set("_test_field1", 4711);
+            MappedDiagnosticsLogicalContext.Set("_test_field2", "foo");
+
+            string renderedGelf = gelfLayout.Render(new LogEventInfo(LogLevel.Info, "logger", "message"));
+
+            var logLine = JsonConvert.DeserializeObject<JObject>(renderedGelf);
+            logLine.SelectToken("_test_field1").Value<int>().Should().Be(4711);
+            logLine.SelectToken("_test_field2").Value<string>().Should().Be("foo");
+        }
+
+        [Fact]
+        public void AddedScopeFieldNamesAreConvertedToSnakeCase()
+        {
+            var gelfLayout = new GelfLayout();
+            MappedDiagnosticsLogicalContext.Set("AField", 4711);
+            MappedDiagnosticsLogicalContext.Set("Another Field", 4711);
+            MappedDiagnosticsLogicalContext.Set("missing_leading_underscore", 4711);
+
+            string renderedGelf = gelfLayout.Render(new LogEventInfo(LogLevel.Info, "logger", "message"));
+
+            var logLine = JsonConvert.DeserializeObject<JObject>(renderedGelf);
+            logLine.SelectToken("_a_field").Should().NotBeNull();
+            logLine.SelectToken("_another_field").Should().NotBeNull();
+            logLine.SelectToken("_missing_leading_underscore").Should().NotBeNull();
         }
 
         private static JProperty GetProperty(string output, string propertyName)
