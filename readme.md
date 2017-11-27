@@ -9,6 +9,7 @@ It uses [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Loggin
   * predefined AXOOM configuration
   * GELF logging format
   * extensions for `ILogger` which hide the parameter `eventId`
+  * supports [Log Scopes](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x#log-scopes)
 
 ## Installation
 You can add this library to your project using NuGet.
