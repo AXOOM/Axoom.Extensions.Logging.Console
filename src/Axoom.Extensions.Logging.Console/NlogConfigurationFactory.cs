@@ -14,7 +14,7 @@ namespace Axoom.Extensions.Logging.Console
         {
             var nlogConfig = new LoggingConfiguration();
 
-            Target nlogTarget = CreateConsoleTarget(loggingOptions.Format);
+            Target nlogTarget = CreateConsoleTarget(loggingOptions);
 
             if (loggingOptions.Async)
             {
@@ -26,10 +26,10 @@ namespace Axoom.Extensions.Logging.Console
             return nlogConfig;
         }
 
-        private static ColoredConsoleTarget CreateConsoleTarget(LogFormat format)
+        private static ColoredConsoleTarget CreateConsoleTarget(ConsoleLoggerOptions loggingOptions)
             => new ColoredConsoleTarget(name: TARGET_CONSOLE)
             {
-                Layout = format.GetLayout()
+                Layout = loggingOptions.Format.GetLayout(loggingOptions.IncludeMappedDiagnosticContext)
             };
     }
 }
