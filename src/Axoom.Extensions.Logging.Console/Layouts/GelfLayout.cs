@@ -5,8 +5,10 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 {
     internal class GelfLayout : JsonLayout
     {
-        public GelfLayout()
+        public GelfLayout(bool includeMdc = false)
         {
+            this.IncludeMdc = includeMdc;
+
             Attributes.Add(new JsonAttribute("version", "1.1"));
             Attributes.Add(new JsonAttribute("host", Environment.MachineName));
             Attributes.Add(new JsonAttribute("short_message", LayoutFormats.MESSAGE));

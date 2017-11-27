@@ -20,7 +20,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         public GelfLayoutFacts()
         {
             new LoggerFactory().AddAxoomConsole();
-            
+
             _layout = new GelfLayout();
             _logEventInfo = new LogEventInfo(LogLevel.Debug, "MyLogger", "MyMessage")
             {
@@ -106,16 +106,42 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             gelfMessage.Properties().ToList().ForEach(prop => prop.Name.Should().StartWith("_", "additional fields have to start with an underscore"));
         }
-        
+
         [Fact]
         public void AdditionalFieldsHaveValidNames()
         {
             var regex = new Regex(@"^[\w\-]*$");
-            
+
             string output = _layout.Render(_logEventInfo);
 
             var gelfMessage = JsonConvert.DeserializeObject<JObject>(output);
             gelfMessage.Properties().ToList().ForEach(prop => prop.Name.Should().MatchRegex(regex.ToString(), "additional fields have to match the regex pattern"));
+        }
+
+        [Fact]
+        public void MappedDiagnosticContextFieldsAreNotIncludedByDefault()
+        {
+            var gelfLayout = new GelfLayout();
+
+            NLog.MappedDiagnosticsContext.Set("_customField", "app specific fields are awesome");
+            string output = gelfLayout.Render(_logEventInfo);
+            NLog.MappedDiagnosticsContext.Clear();
+
+            var gelfMessage = JsonConvert.DeserializeObject<JObject>(output);
+            ((string)gelfMessage["_customField"]).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void MappedDiagnosticContextFieldsAreIncludable()
+        {
+            var gelfLayout = new GelfLayout(true);
+
+            NLog.MappedDiagnosticsContext.Set("_customField", "app specific fields are awesome");
+            string output = gelfLayout.Render(_logEventInfo);
+            NLog.MappedDiagnosticsContext.Clear();
+
+            var gelfMessage = JsonConvert.DeserializeObject<JObject>(output);
+            ((string)gelfMessage["_customField"]).Should().Be("app specific fields are awesome");
         }
 
         private static JProperty GetProperty(string output, string propertyName)
