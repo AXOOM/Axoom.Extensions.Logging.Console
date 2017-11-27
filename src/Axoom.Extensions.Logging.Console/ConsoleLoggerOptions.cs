@@ -27,7 +27,7 @@ namespace Axoom.Extensions.Logging.Console
             string value = configuration["Async"];
 
             if (string.IsNullOrEmpty(value))
-                return true;
+                return new ConsoleLoggerOptions().Async;
 
             bool.TryParse(value, out bool logAsync);
             return logAsync;
@@ -37,12 +37,10 @@ namespace Axoom.Extensions.Logging.Console
         {
             string value = configuration["Format"];
             if (string.IsNullOrEmpty(value))
-                return LogFormat.Gelf;
+                return new ConsoleLoggerOptions().Format;
 
-            if (Enum.TryParse(value, out LogFormat format))
-            {
+            if (Enum.TryParse(value, out LogFormat format) && Enum.IsDefined(typeof(LogFormat), format))
                 return format;
-            }
 
             throw new InvalidOperationException($"Configuration \"{value}\" for setting \"{nameof(Format)}\" is not supported.");
         }
@@ -52,7 +50,7 @@ namespace Axoom.Extensions.Logging.Console
             string value = configuration["IncludeScopes"];
 
             if (string.IsNullOrEmpty(value))
-                return true;
+                return new ConsoleLoggerOptions().IncludeScopes;
 
             bool.TryParse(value, out bool includeScopes);
             return includeScopes;
