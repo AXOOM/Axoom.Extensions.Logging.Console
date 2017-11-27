@@ -53,6 +53,7 @@ Run `build.ps1` to compile the source code and package the library as a NuGet pa
 This script takes a version number as an input argument. The source code itself contains no version numbers. Instead version numbers should be determined at build time using [GitVersion](https://gitversion.readthedocs.io).
 
 ### Pull Requests
+* Before doing a feature PR, please file an issue to let us check whether we're already working on it.
 * Your pull request has to provide unit tests!
 * Document any public interface method and property. At least:
   * Method: Summary, param
