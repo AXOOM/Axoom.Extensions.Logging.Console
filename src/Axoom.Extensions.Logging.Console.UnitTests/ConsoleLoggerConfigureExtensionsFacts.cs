@@ -9,23 +9,20 @@ using NLog;
 using NLog.Config;
 using NLog.Extensions.Logging;
 using Xunit;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Axoom.Extensions.Logging.Console
 {
     public class ConsoleLoggerConfigureExtensionsFacts
     {
-        private readonly LoggerFactory _loggerFactory;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public ConsoleLoggerConfigureExtensionsFacts()
-        {
-            _loggerFactory = new LoggerFactory();
-        }
+        public ConsoleLoggerConfigureExtensionsFacts() 
+            => _loggerFactory = new LoggerFactory().AddAxoomConsole();
 
         [Fact]
         public void AddingConsoleRegistersSysLogLevelLayoutRenderer()
         {
-            _loggerFactory.AddAxoomConsole();
-
             ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("sysloglevel", out Type type);
 
             type.ShouldBeEquivalentTo(typeof(SysLogLevelLayoutRenderer));
@@ -34,8 +31,6 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void AddingConsoleRegistersUnixTimeLayoutRenderer()
         {
-            _loggerFactory.AddAxoomConsole();
-
             ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("unixtime", out Type type);
 
             type.ShouldBeEquivalentTo(typeof(UnixTimeLayoutRenderer));

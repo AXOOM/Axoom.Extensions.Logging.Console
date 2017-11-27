@@ -13,8 +13,8 @@ namespace Axoom.Extensions.Logging.Console.LayoutRenderers
     [UsedImplicitly]
     internal class UnixTimeLayoutRenderer : LongDateLayoutRenderer
     {
-        private static readonly NumberFormatInfo _numberFormat = new NumberFormatInfo{NumberDecimalSeparator = "."};
-        
+        private static readonly NumberFormatInfo _numberFormat = new NumberFormatInfo {NumberDecimalSeparator = "."};
+
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             DateTime dateTime = logEvent.TimeStamp;

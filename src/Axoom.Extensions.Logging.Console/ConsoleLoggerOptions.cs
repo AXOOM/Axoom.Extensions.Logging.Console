@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Axoom.Extensions.Logging.Console
 {
- [PublicAPI]
+    [PublicAPI]
     public class ConsoleLoggerOptions
     {
         public ConsoleLoggerOptions()
@@ -29,8 +29,8 @@ namespace Axoom.Extensions.Logging.Console
             if (string.IsNullOrEmpty(value))
                 return true;
 
-            bool.TryParse(value, out bool async);
-            return async;
+            bool.TryParse(value, out bool logAsync);
+            return logAsync;
         }
 
         private LogFormat ReadLogFormatOption(IConfiguration configuration)

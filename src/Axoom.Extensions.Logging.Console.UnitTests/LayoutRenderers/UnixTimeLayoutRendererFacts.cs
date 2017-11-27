@@ -10,9 +10,7 @@ namespace Axoom.Extensions.Logging.Console.LayoutRenderers
         private readonly UnixTimeLayoutRenderer _layoutRenderer;
 
         public UnixTimeLayoutRendererFacts()
-        {
-            _layoutRenderer = new UnixTimeLayoutRenderer();
-        }
+            => _layoutRenderer = new UnixTimeLayoutRenderer();
 
         [Fact]
         public void RendersCorrectToUnixTime()
@@ -23,7 +21,7 @@ namespace Axoom.Extensions.Logging.Console.LayoutRenderers
             };
 
             string output = _layoutRenderer.Render(logEventInfo);
-            
+
             output.ShouldBeEquivalentTo("1504092255.345");
         }
     }

@@ -8,7 +8,7 @@ namespace Axoom.Extensions.Logging.Console
     {
         private static readonly Lazy<GelfLayout> _gelfLayout = new Lazy<GelfLayout>(() => new GelfLayout());
         private static readonly Lazy<Layout> _plainLayout = new Lazy<Layout>(() => new PlainLayout());
-        
+
         public static Layout GetLayout(this LogFormat format)
         {
             switch (format)

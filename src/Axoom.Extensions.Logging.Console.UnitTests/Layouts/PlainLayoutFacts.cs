@@ -20,7 +20,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(
@@ -34,13 +34,13 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
-        
+
         [Fact]
         public void LogLevelDebugIsCorrectlyPadded()
         {
@@ -48,13 +48,13 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
-        
+
         [Fact]
         public void LogLevelInfoIsCorrectlyPadded()
         {
@@ -62,13 +62,13 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
-        
+
         [Fact]
         public void LogLevelWarnIsCorrectlyPadded()
         {
@@ -76,13 +76,13 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
-        
+
         [Fact]
         public void LogLevelErrorIsCorrectlyPadded()
         {
@@ -90,13 +90,13 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
-        
+
         [Fact]
         public void LogLevelFatalIsCorrectlyPadded()
         {
@@ -104,7 +104,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             {
                 TimeStamp = DateTime.Now
             };
-            
+
             string output = _layout.Render(logEventInfo);
 
             output.ShouldBeEquivalentTo(

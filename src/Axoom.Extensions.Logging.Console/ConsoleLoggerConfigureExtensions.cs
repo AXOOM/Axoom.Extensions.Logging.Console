@@ -30,7 +30,7 @@ namespace Axoom.Extensions.Logging.Console
 
             return builder;
         }
-        
+
         /// <summary>
         /// Adds a console logger to the <paramref name="factory"/>.
         /// </summary>
@@ -41,7 +41,7 @@ namespace Axoom.Extensions.Logging.Console
         /// </summary>
         public static ILoggerFactory AddAxoomConsole([NotNull] this ILoggerFactory factory, [NotNull] IConfiguration configuration)
             => AddAxoomConsole(factory, new ConsoleLoggerOptions(configuration));
-        
+
         /// <summary>
         /// Adds a console logger with the given <paramref name="options"/> to the <paramref name="factory"/>.
         /// </summary>

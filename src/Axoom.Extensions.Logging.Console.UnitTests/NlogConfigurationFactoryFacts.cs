@@ -14,7 +14,8 @@ namespace Axoom.Extensions.Logging.Console
     {
         private readonly NlogConfigurationFactory _factory;
 
-        public NlogConfigurationFactoryFacts() => _factory = new NlogConfigurationFactory();
+        public NlogConfigurationFactoryFacts() 
+            => _factory = new NlogConfigurationFactory();
 
         [Fact]
         public void CreatingWithGelfFormatSetsGelfLayout()
