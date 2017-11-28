@@ -62,10 +62,23 @@ namespace Axoom.Extensions.Logging.Console
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging")));
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("Microsoft.Extensions.Logging.Abstractions")));
             LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName("NLog.Extensions.Logging")));
+            TryAddHiddenAssembly("Axoom.Extensions.Logging.JsonDump");
             LogManager.AddHiddenAssembly(typeof(ConsoleLoggerConfigureExtensions).GetTypeInfo().Assembly);
             LogManager.Configuration = new NlogConfigurationFactory().Create(options);
             LogManager.Configuration.Reload();
             LogManager.ReconfigExistingLoggers();
+        }
+
+        private static void TryAddHiddenAssembly(string assemblyName)
+        {
+            try
+            {
+                LogManager.AddHiddenAssembly(Assembly.Load(new AssemblyName(assemblyName)));
+            }
+            catch (Exception)
+            {
+                // Not an issue.
+            }
         }
 
         private static void SetupLayoutRenderers()
