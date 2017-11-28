@@ -7,9 +7,9 @@ It uses [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Loggin
 
   * standardized AXOOM log layout
   * predefined AXOOM configuration
-  * GELF logging format
+  * `GELF` logging format
   * extensions for `ILogger` which hide the parameter `eventId`
-  * supports [Log Scopes](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x#log-scopes)
+  * supports [Log Scopes](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x#log-scopes) for `GELF` format
 
 ## Installation
 You can add this library to your project using NuGet.
@@ -36,6 +36,24 @@ public void ConfigureLogging(IServiceProvider serviceProvider)
 | --- | --- | --- | --- |
 | Format | Gelf | Gelf, Plain | Sets the logging format |
 | Async | true | true, false | see https://github.com/nlog/NLog/wiki/AsyncWrapper-target |
+
+## Using log scopes
+Sometimes it is a good idea to add some contextual information to your logs.
+This is a supported feature and follows the Microsoft's [Log Scopes](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x#log-scopes).
+
+```c#
+using (logger.BeginScope(new Dictionary<string, object>{{"_my_custom_field", "value"}}))
+{
+    logger.LogInformation("test");
+}
+```
+
+The resulting GELF-message will then contain: `"_my_custom_field":"value"`.
+We also take care of the format of the fields you are passing in; if you pass `MyCustomField` we automatically convert it to an additional (prefixed with underscore) snake-case field `_my_custom_field`.
+
+__Limitations__:
+At least for now, we only support custom fields provided in a `Dictionary<string, object>`, neither simple `string`s nor `Dictionary<string, string>`. 
+This is due to us seeing no valuable reason for supporting it in a JSON log-format.
 
 ## Why is `GELF` the default logformat?
 All AXOOM assets are running with docker. As we are collecting all logs in a centralized system, we need information about the running container which produces these logs. 
