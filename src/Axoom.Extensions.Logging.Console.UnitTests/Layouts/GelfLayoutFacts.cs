@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Axoom.Extensions.Logging.Console.LayoutRenderers;
@@ -7,7 +8,9 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NLog.Targets;
 using Xunit;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 using LogLevel = NLog.LogLevel;
 
 namespace Axoom.Extensions.Logging.Console.Layouts
@@ -148,6 +151,25 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             logLine.SelectToken("_a_field").Should().NotBeNull();
             logLine.SelectToken("_another_field").Should().NotBeNull();
             logLine.SelectToken("_missing_leading_underscore").Should().NotBeNull();
+        }
+
+        [Fact]
+        public void StringObjectDictionaryScopeIsSupported()
+        {
+            ILoggerFactory factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions{Async = false,IncludeScopes = true});
+
+            var debugTarget = new DebugTarget("debug"){Layout = new GelfLayout()};
+            LogManager.Configuration.AddTarget(debugTarget);
+            LogManager.Configuration.AddRuleForOneLevel(LogLevel.Info, debugTarget);
+            LogManager.ReconfigExistingLoggers();
+            ILogger logger = factory.CreateLogger("test");
+
+            using (logger.BeginScope(new Dictionary<string, object>{{"_myfield", "value"}}))
+            {
+                logger.LogInformation("test");
+            }
+
+            debugTarget.LastMessage.Should().Contain("\"_myfield\": \"value\"");
         }
 
         private static JProperty GetProperty(string output, string propertyName)

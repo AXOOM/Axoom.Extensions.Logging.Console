@@ -35,6 +35,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         private static void EnforceSnakeCasedAdditionalFieldNames()
         {
             ICollection<string> fieldNames = MappedDiagnosticsLogicalContext.GetNames();
+
             foreach (string fieldName in fieldNames)
             {
                 string newFieldName = fieldName.ToSnakeCase();
