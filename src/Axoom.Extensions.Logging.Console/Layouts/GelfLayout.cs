@@ -41,7 +41,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
                 string newFieldName = fieldName.ToSnakeCase();
 
                 if (newFieldName.Equals(fieldName))
-                    return;
+                    continue;
 
                 RewriteFieldName(fieldName, newFieldName);
             }
