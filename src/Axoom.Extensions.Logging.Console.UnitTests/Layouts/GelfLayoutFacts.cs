@@ -164,12 +164,12 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             LogManager.ReconfigExistingLoggers();
             ILogger logger = factory.CreateLogger("test");
 
-            using (logger.BeginScope(new Dictionary<string, object>{{"_myfield", "value"}}))
+            using (logger.BeginScope(new Dictionary<string, object>{{"myField", "value"}}))
             {
                 logger.LogInformation("test");
             }
 
-            debugTarget.LastMessage.Should().Contain("\"_myfield\": \"value\"");
+            debugTarget.LastMessage.Should().Contain("\"_my_field\": \"value\"");
         }
 
         private static JProperty GetProperty(string output, string propertyName)
