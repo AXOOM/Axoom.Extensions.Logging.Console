@@ -156,15 +156,15 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         [Fact]
         public void StringObjectDictionaryScopeIsSupported()
         {
-            ILoggerFactory factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions{Async = false,IncludeScopes = true});
+            ILoggerFactory factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions {Async = false, IncludeScopes = true});
 
-            var debugTarget = new DebugTarget("debug"){Layout = new GelfLayout()};
+            var debugTarget = new DebugTarget("debug") {Layout = new GelfLayout()};
             LogManager.Configuration.AddTarget(debugTarget);
             LogManager.Configuration.AddRuleForOneLevel(LogLevel.Info, debugTarget);
             LogManager.ReconfigExistingLoggers();
             ILogger logger = factory.CreateLogger("test");
 
-            using (logger.BeginScope(new Dictionary<string, object>{{"myField", "value"}}))
+            using (logger.BeginScope(new Dictionary<string, object> {{"myField", "value"}}))
             {
                 logger.LogInformation("test");
             }
