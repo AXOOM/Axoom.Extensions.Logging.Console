@@ -66,19 +66,6 @@ namespace Axoom.Extensions.Logging.Console
             VerifyLog(LogLevel.Critical);
         }
 
-        [Fact]
-        public void BeginningScopeWithValueTuplesInvokesLoggerBeginScopeWithDictionary()
-        {
-            var expectedDict = new Dictionary<string, object> {["key"] = "value", ["key2"] = "value2"};
-            Dictionary<string, object> actualDict = null;
-            _loggerMock.Setup(mock => mock.BeginScope(It.IsAny<Dictionary<string, object>>()))
-                       .Callback<Dictionary<string, object>>(dict => actualDict = dict);
-
-            _logger.BeginScope(("key", "value"), ("key2", "value2"));
-
-            actualDict.Should().Equal(expectedDict);
-        }
-
         private void VerifyLog(LogLevel logLevel)
         {
             _loggerMock.Verify(mock => mock.Log(logLevel,

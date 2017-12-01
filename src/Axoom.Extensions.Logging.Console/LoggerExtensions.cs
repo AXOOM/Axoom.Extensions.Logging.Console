@@ -56,15 +56,5 @@ namespace Axoom.Extensions.Logging.Console
         /// <param name="args">An object array that contains zero or more objects to format.</param>
         public static void LogCritical(this ILogger logger, Exception exception, string message, params object[] args)
             => logger.LogCritical(0, exception, message, args);
-
-        /// <summary>Begins a logical operation scope.</summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="fields">The fields for the scope.</param>
-        /// <returns>An IDisposable that ends the logical operation scope on dispose.</returns>
-        public static IDisposable BeginScope(this ILogger logger, params (string, object)[] fields)
-            => logger.BeginScope(fields.ToDictionary());
-
-        private static Dictionary<string, object> ToDictionary(this (string key, object value)[] tuples)
-            => tuples.ToDictionary(tuple => tuple.key, tuple => tuple.value);
     }
 }
