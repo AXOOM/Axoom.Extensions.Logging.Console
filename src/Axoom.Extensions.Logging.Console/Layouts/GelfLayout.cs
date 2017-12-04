@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Layouts;
 
@@ -10,7 +12,12 @@ namespace Axoom.Extensions.Logging.Console.Layouts
     {
         public GelfLayout()
         {
-            IncludeMdlc = true;
+            IncludeMdc = false;
+            IncludeMdlc = false;
+            IncludeAllProperties = false;
+            RenderEmptyObject = false;
+            SuppressSpaces = true;
+            
             Attributes.Add(new JsonAttribute("version", "1.1"));
             Attributes.Add(new JsonAttribute("timestamp", LayoutFormats.TIMESTAMP_UNIX, encode: false));
             Attributes.Add(new JsonAttribute("host", Environment.MachineName));
@@ -28,30 +35,42 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
         protected override void RenderFormattedMessage(LogEventInfo logEvent, StringBuilder target)
         {
-            EnforceSnakeCasedAdditionalFieldNames();
             base.RenderFormattedMessage(logEvent, target);
+
+            JObject jObject = JObject.Parse(target.ToString());
+            foreach ((string fieldName, object value) in GetScopeFields())
+            {
+                jObject.Add(fieldName, JToken.FromObject(value));
+            }
+            target.Clear();
+            target.Append(jObject);
         }
 
-        private static void EnforceSnakeCasedAdditionalFieldNames()
+        private static Dictionary<string, object> GetScopeFields()
         {
-            ICollection<string> fieldNames = MappedDiagnosticsLogicalContext.GetNames();
+            var additionalFields = new Dictionary<string, object>();
 
-            foreach (string fieldName in fieldNames)
+            PopulateThreadLocalFields(additionalFields);
+            PopulateAsyncLocalFields(additionalFields);
+
+            return additionalFields;
+        }
+
+        private static void PopulateThreadLocalFields(IDictionary<string, object> additionalFields)
+        {
+            foreach (string fieldName in MappedDiagnosticsLogicalContext.GetNames())
             {
-                string newFieldName = fieldName.ToSnakeCase();
-
-                if (newFieldName.Equals(fieldName))
-                    continue;
-
-                RewriteFieldName(fieldName, newFieldName);
+                additionalFields[fieldName.ToSnakeCase()] = MappedDiagnosticsLogicalContext.GetObject(fieldName);
             }
         }
 
-        private static void RewriteFieldName(string fieldName, string newFieldName)
+        private static void PopulateAsyncLocalFields(IDictionary<string, object> additionalFields)
         {
-            object fieldValue = MappedDiagnosticsLogicalContext.GetObject(fieldName);
-            MappedDiagnosticsLogicalContext.Remove(fieldName);
-            MappedDiagnosticsLogicalContext.Set(newFieldName, fieldValue);
+            foreach (Dictionary<string, object> dict in NestedDiagnosticsLogicalContext.GetAllObjects().OfType<Dictionary<string, object>>())
+            foreach ((string fieldName, object value) in dict)
+            {
+                additionalFields[fieldName.ToSnakeCase()] = value;
+            }
         }
     }
 }
