@@ -2,7 +2,7 @@
 {
     internal static class LayoutFormats
     {
-        public const string TIMESTAMP = "${date:universalTime=true:format=o}";
+        public const string TIMESTAMP_ISO8601 = "${date:universalTime=true:format=o}";
         public const string TIMESTAMP_UNIX = "${unixtime:universalTime=true}";
         public const string SYS_LOGLEVEL = "${sysloglevel}";
         public const string LOGLEVEL = "${level:upperCase=true}";

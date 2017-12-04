@@ -6,7 +6,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
     {
         public PlainLayout()
         {
-            Text = $"{LayoutFormats.TIMESTAMP} | " +
+            Text = $"{LayoutFormats.TIMESTAMP_ISO8601} | " +
                    $"{LayoutFormats.LOGLEVEL_PADDED} | " +
                    $"{LayoutFormats.LOGGER} | " +
                    $"{LayoutFormats.CALLSITE} | " +
