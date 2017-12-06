@@ -20,6 +20,12 @@ namespace Axoom.Extensions.Logging.Console
         public static ILoggingBuilder AddAxoomConsole(this ILoggingBuilder builder) => AddAxoomConsole(builder, new ConsoleLoggerOptions());
 
         /// <summary>
+        /// Adds a console logger with the given <paramref name="configuration"/> to the <paramref name="builder"/>.
+        /// </summary>
+        public static ILoggingBuilder AddAxoomConsole([NotNull] this ILoggingBuilder builder, [NotNull] IConfiguration configuration)
+            => AddAxoomConsole(builder, new ConsoleLoggerOptions(configuration));
+
+        /// <summary>
         /// Adds a console logger with the given <paramref name="options"/> to the <paramref name="builder"/>.
         /// </summary>
         public static ILoggingBuilder AddAxoomConsole([NotNull] this ILoggingBuilder builder, [NotNull] ConsoleLoggerOptions options)
