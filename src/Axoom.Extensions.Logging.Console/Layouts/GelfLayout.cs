@@ -37,14 +37,30 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         protected override void RenderFormattedMessage(LogEventInfo logEvent, StringBuilder target)
         {
             base.RenderFormattedMessage(logEvent, target);
+            AddAdditionalFields(target);
+        }
 
+        private static void AddAdditionalFields(StringBuilder target)
+        {
             JObject jObject = JObject.Parse(target.ToString());
             foreach ((string fieldName, object value) in GetScopeFields())
             {
                 jObject.Add(fieldName, JToken.FromObject(value));
             }
+
+            DeduplicateMessage(jObject);
+
             target.Clear();
             target.Append(jObject.ToString(Formatting.None));
+        }
+
+        private static void DeduplicateMessage(JObject jObject)
+        {
+            JToken shortMessage = jObject.SelectToken("short_message");
+            JToken fullMessage = jObject.SelectToken("full_message");
+            
+            if (shortMessage.Value<string>().Equals(fullMessage.Value<string>()))
+                jObject.Remove(fullMessage.Path);
         }
 
         private static Dictionary<string, object> GetScopeFields()

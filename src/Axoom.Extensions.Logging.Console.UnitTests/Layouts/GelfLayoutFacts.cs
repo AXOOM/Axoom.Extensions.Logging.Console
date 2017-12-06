@@ -156,13 +156,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         [Fact]
         public void StringObjectDictionaryScopeIsSupported()
         {
-            ILoggerFactory factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions {Async = false, IncludeScopes = true});
-
-            var debugTarget = new DebugTarget("debug") {Layout = new GelfLayout()};
-            LogManager.Configuration.AddTarget(debugTarget);
-            LogManager.Configuration.AddRuleForOneLevel(LogLevel.Info, debugTarget);
-            LogManager.ReconfigExistingLoggers();
-            ILogger logger = factory.CreateLogger("test");
+            DebugTarget debugTarget = CreateDebuggableLogger(includeScopes: true, logger: out ILogger logger);
 
             using (logger.BeginScope(new Dictionary<string, object> {{"myField", "value"}}))
             {
@@ -170,6 +164,38 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             }
 
             debugTarget.LastMessage.Should().Contain("\"_my_field\":\"value\"");
+        }
+
+        [Fact]
+        public void FullMessageIsRemovedIfEqualsShortMessage()
+        {
+            DebugTarget debugTarget = CreateDebuggableLogger(includeScopes: false, logger: out ILogger logger);
+
+            logger.LogInformation("test");
+
+            debugTarget.LastMessage.Should().NotContain("full_message");
+        }
+
+        [Fact]
+        public void FullMessageIsPresentIfDiffersFromShortMessage()
+        {
+            DebugTarget debugTarget = CreateDebuggableLogger(includeScopes: false, logger: out ILogger logger);
+
+            logger.LogInformation(new Exception("message"), "test");
+
+            debugTarget.LastMessage.Should().Contain("full_message");
+        }
+
+        private static DebugTarget CreateDebuggableLogger(bool includeScopes, out ILogger logger)
+        {
+            ILoggerFactory factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions {Async = false, IncludeScopes = includeScopes});
+
+            var debugTarget = new DebugTarget("debug") {Layout = new GelfLayout()};
+            LogManager.Configuration.AddTarget(debugTarget);
+            LogManager.Configuration.AddRuleForOneLevel(LogLevel.Info, debugTarget);
+            LogManager.ReconfigExistingLoggers();
+            logger = factory.CreateLogger("test");
+            return debugTarget;
         }
 
         private static JProperty GetProperty(string output, string propertyName)
