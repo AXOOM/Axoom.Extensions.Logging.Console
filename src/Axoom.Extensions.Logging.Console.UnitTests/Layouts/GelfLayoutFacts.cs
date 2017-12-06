@@ -169,7 +169,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
                 logger.LogInformation("test");
             }
 
-            debugTarget.LastMessage.Should().Contain("\"_my_field\": \"value\"");
+            debugTarget.LastMessage.Should().Contain("\"_my_field\":\"value\"");
         }
 
         private static JProperty GetProperty(string output, string propertyName)

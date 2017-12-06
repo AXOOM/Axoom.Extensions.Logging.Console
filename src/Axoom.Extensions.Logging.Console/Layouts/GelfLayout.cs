@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Layouts;
@@ -43,7 +44,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
                 jObject.Add(fieldName, JToken.FromObject(value));
             }
             target.Clear();
-            target.Append(jObject);
+            target.Append(jObject.ToString(Formatting.None));
         }
 
         private static Dictionary<string, object> GetScopeFields()
