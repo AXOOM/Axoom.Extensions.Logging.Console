@@ -78,6 +78,18 @@ namespace Axoom.Extensions.Logging.Console
             options.IncludeScopes.Should().Be(new ConsoleLoggerOptions().IncludeScopes);
         }
 
+        [Fact]
+        public void ReadingFormatIsCaseInsensitive()
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string> {["Format"] = "plain"})
+                .Build();
+            
+            Action loadingOptions = () => new ConsoleLoggerOptions(configuration);
+            
+            loadingOptions.ShouldNotThrow<InvalidOperationException>();
+        }
+
         private static IConfiguration BuildConfiguration(LogFormat logFormat = LogFormat.Gelf, bool logAsync = true, bool includeScopes = false)
             => new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>

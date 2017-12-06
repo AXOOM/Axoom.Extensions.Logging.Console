@@ -39,7 +39,7 @@ namespace Axoom.Extensions.Logging.Console
             if (string.IsNullOrEmpty(value))
                 return new ConsoleLoggerOptions().Format;
 
-            if (Enum.TryParse(value, out LogFormat format) && Enum.IsDefined(typeof(LogFormat), format))
+            if (Enum.TryParse(value, ignoreCase: true, result: out LogFormat format) && Enum.IsDefined(typeof(LogFormat), format))
                 return format;
 
             throw new InvalidOperationException($"Configuration \"{value}\" for setting \"{nameof(Format)}\" is not supported.");
