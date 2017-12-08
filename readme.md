@@ -64,6 +64,21 @@ Therefore we've decided to produce json logs. To have a minimum set of informati
 
 For development purposes you can switch the format to `Plain`.
 
+## Troubleshooting
+
+* It might occur, that frameworks you are using add/override this `LogProvider`. This can be solved by 
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services
+        .AddLogging(logging =>
+        {  
+            logging.ClearProviders(); // Removes other log providers
+            logging.AddConfiguration(Configuration.GetSection("Logging")))
+        })
+}
+```
+
 ## Contributing
 
 ### Build
