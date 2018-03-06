@@ -4,13 +4,13 @@ before_build:
   - gitversion /l console /output buildserver
 
 build_script:
-  - dotnet msbuild /t:Restore /t:Build /p:Configuration=Release /p:Version=%GitVersion_NuGetVersion% src/
+  - ps: src\build.ps1 $env:GitVersion_NuGetVersion
 
 test_script:
-  - ps: dotnet test --configuration Release --no-build $(Resolve-Path ".\src\*.UnitTests\*.csproj")
+  - ps: src\test.ps1
 
 artifacts:
-  - path: artifacts/*/*.nupkg
+  - path: artifacts\*\*.nupkg
 
 deploy:
   provider: Environment

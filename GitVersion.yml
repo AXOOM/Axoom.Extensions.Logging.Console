@@ -1,5 +1,11 @@
 mode: ContinuousDeployment
 branches:
-  develop:
-    tag: alpha
+  dev(elop)?(ment)?$:
+    tag: pre
     increment: patch
+  features?[/-]:
+    tag: pre-pre
+  releases?[/-]:
+    tag: rc
+  hotfix(es)?[/-]:
+    tag: rc
