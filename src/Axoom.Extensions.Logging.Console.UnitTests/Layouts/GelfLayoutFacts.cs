@@ -45,8 +45,8 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         {
             string output = _layout.Render(_logEventInfo);
 
-            JProperty property = GetProperty(output, "version");
-            property.Value.Value<string>().ShouldBeEquivalentTo("1.1");
+            var property = GetProperty(output, "version");
+            property.Value.Value<string>().Should().Be("1.1");
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         {
             string output = _layout.Render(_logEventInfo);
 
-            JProperty property = GetProperty(output, "short_message");
+            var property = GetProperty(output, "short_message");
             property.Value.Value<string>().Should().NotBeNullOrEmpty();
         }
 
@@ -72,7 +72,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         {
             string output = _layout.Render(_logEventInfo);
 
-            JProperty property = GetProperty(output, "timestamp");
+            var property = GetProperty(output, "timestamp");
             property.Value.Value<decimal>().Should().BeGreaterThan(0);
         }
 
@@ -81,7 +81,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         {
             string output = _layout.Render(_logEventInfo);
 
-            JProperty property = GetProperty(output, "level");
+            var property = GetProperty(output, "level");
             property.Value.Value<int>()
                     .Should()
                     .BeOneOf(SysLogLevelLayoutRenderer.SYSLOG_CRITICAL,
@@ -156,7 +156,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         [Fact]
         public void StringObjectDictionaryScopeIsSupported()
         {
-            DebugTarget debugTarget = CreateDebuggableLogger(includeScopes: true, logger: out ILogger logger);
+            var debugTarget = CreateDebuggableLogger(includeScopes: true, logger: out var logger);
 
             using (logger.BeginScope(new Dictionary<string, object> {{"myField", "value"}}))
             {
@@ -169,7 +169,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         [Fact]
         public void FullMessageIsRemovedIfEqualsShortMessage()
         {
-            DebugTarget debugTarget = CreateDebuggableLogger(includeScopes: false, logger: out ILogger logger);
+            var debugTarget = CreateDebuggableLogger(includeScopes: false, logger: out var logger);
 
             logger.LogInformation("test");
 
@@ -179,7 +179,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         [Fact]
         public void FullMessageIsPresentIfDiffersFromShortMessage()
         {
-            DebugTarget debugTarget = CreateDebuggableLogger(includeScopes: false, logger: out ILogger logger);
+            var debugTarget = CreateDebuggableLogger(includeScopes: false, logger: out var logger);
 
             logger.LogInformation(new Exception("message"), "test");
 
@@ -188,7 +188,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
         private static DebugTarget CreateDebuggableLogger(bool includeScopes, out ILogger logger)
         {
-            ILoggerFactory factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions {Async = false, IncludeScopes = includeScopes});
+            var factory = new LoggerFactory().AddAxoomConsole(new ConsoleLoggerOptions {Async = false, IncludeScopes = includeScopes});
 
             var debugTarget = new DebugTarget("debug") {Layout = new GelfLayout()};
             LogManager.Configuration.AddTarget(debugTarget);
@@ -201,7 +201,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         private static JProperty GetProperty(string output, string propertyName)
         {
             var gelfMessage = JsonConvert.DeserializeObject<JObject>(output);
-            JProperty property = gelfMessage.Properties().FirstOrDefault(prop => prop.Name.Equals(propertyName));
+            var property = gelfMessage.Properties().FirstOrDefault(prop => prop.Name.Equals(propertyName));
             property.Should().NotBeNull();
             return property;
         }

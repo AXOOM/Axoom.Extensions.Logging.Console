@@ -11,7 +11,7 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void ReadsAsyncOptionFromConfiguration()
         {
-            IConfiguration configuration = BuildConfiguration(logAsync: false);
+            var configuration = BuildConfiguration(logAsync: false);
 
             var options = new ConsoleLoggerOptions(configuration);
 
@@ -22,7 +22,7 @@ namespace Axoom.Extensions.Logging.Console
         public void ReadingUnsetAsyncOptionFromConfigurationSetsToDefault()
         {
             IConfiguration configuration = new ConfigurationBuilder().Build();
-            
+
             var options = new ConsoleLoggerOptions(configuration);
 
             options.Async.Should().Be(new ConsoleLoggerOptions().Async);
@@ -31,18 +31,18 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void ReadsLogFormatFromConfiguration()
         {
-            IConfiguration configuration = BuildConfiguration(logFormat: LogFormat.Plain);
+            var configuration = BuildConfiguration(logFormat: LogFormat.Plain);
 
             var options = new ConsoleLoggerOptions(configuration);
 
             options.Format.Should().Be(LogFormat.Plain);
         }
-        
+
         [Fact]
         public void ReadingUnsetLogFormatFromConfigurationSetsToDefault()
         {
             IConfiguration configuration = new ConfigurationBuilder().Build();
-            
+
             var options = new ConsoleLoggerOptions(configuration);
 
             options.Format.Should().Be(new ConsoleLoggerOptions().Format);
@@ -51,28 +51,28 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void ReadingInvalidLogFormatThrowsInvalidOperationException()
         {
-            IConfiguration configuration = BuildConfiguration(logFormat: (LogFormat) 999);
+            var configuration = BuildConfiguration(logFormat: (LogFormat) 999);
 
             Action creatingOptions = () => new ConsoleLoggerOptions(configuration);
 
-            creatingOptions.ShouldThrow<InvalidOperationException>();
+            creatingOptions.Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
         public void ReadsIncludeScopesOptionFromConfiguration()
         {
-            IConfiguration configuration = BuildConfiguration(includeScopes: true);
+            var configuration = BuildConfiguration(includeScopes: true);
 
             var options = new ConsoleLoggerOptions(configuration);
 
             options.IncludeScopes.Should().BeTrue();
         }
-        
+
         [Fact]
         public void ReadingUnsetIncludeScopesOptionFromConfigurationSetsToDefault()
         {
             IConfiguration configuration = new ConfigurationBuilder().Build();
-            
+
             var options = new ConsoleLoggerOptions(configuration);
 
             options.IncludeScopes.Should().Be(new ConsoleLoggerOptions().IncludeScopes);
@@ -81,13 +81,13 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void ReadingFormatIsCaseInsensitive()
         {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string> {["Format"] = "plain"})
                 .Build();
-            
+
             Action loadingOptions = () => new ConsoleLoggerOptions(configuration);
-            
-            loadingOptions.ShouldNotThrow<InvalidOperationException>();
+
+            loadingOptions.Should().NotThrow<InvalidOperationException>();
         }
 
         private static IConfiguration BuildConfiguration(LogFormat logFormat = LogFormat.Gelf, bool logAsync = true, bool includeScopes = false)

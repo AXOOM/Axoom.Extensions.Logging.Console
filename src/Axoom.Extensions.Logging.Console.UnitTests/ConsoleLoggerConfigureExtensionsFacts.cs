@@ -9,7 +9,6 @@ using NLog;
 using NLog.Config;
 using NLog.Extensions.Logging;
 using Xunit;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Axoom.Extensions.Logging.Console
 {
@@ -17,40 +16,40 @@ namespace Axoom.Extensions.Logging.Console
     {
         private readonly ILoggerFactory _loggerFactory;
 
-        public ConsoleLoggerConfigureExtensionsFacts() 
+        public ConsoleLoggerConfigureExtensionsFacts()
             => _loggerFactory = new LoggerFactory().AddAxoomConsole();
 
         [Fact]
         public void AddingConsoleRegistersSysLogLevelLayoutRenderer()
         {
-            ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("sysloglevel", out Type type);
+            ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("sysloglevel", out var type);
 
-            type.ShouldBeEquivalentTo(typeof(SysLogLevelLayoutRenderer));
+            type.Should().Be(typeof(SysLogLevelLayoutRenderer));
         }
 
         [Fact]
         public void AddingConsoleRegistersUnixTimeLayoutRenderer()
         {
-            ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("unixtime", out Type type);
+            ConfigurationItemFactory.Default.LayoutRenderers.TryGetDefinition("unixtime", out var type);
 
-            type.ShouldBeEquivalentTo(typeof(UnixTimeLayoutRenderer));
+            type.Should().Be(typeof(UnixTimeLayoutRenderer));
         }
 
         [Fact]
         public void AddingConsoleThrowsArgumentNullException()
         {
             Action addingWithNullFactory = () => ConsoleLoggerConfigureExtensions.AddAxoomConsole(factory: null, options: new ConsoleLoggerOptions());
-            addingWithNullFactory.ShouldThrow<ArgumentNullException>();
+            addingWithNullFactory.Should().Throw<ArgumentNullException>();
 
             Action addingWithNullOptions = () => _loggerFactory.AddAxoomConsole(options: null);
-            addingWithNullOptions.ShouldThrow<ArgumentNullException>();
+            addingWithNullOptions.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void AddingConsoleRegistersNLogProvider()
         {
             var factoryMock = new Mock<ILoggerFactory>();
-            ILoggerFactory factory = factoryMock.Object;
+            var factory = factoryMock.Object;
 
             factory.AddAxoomConsole();
 
@@ -64,7 +63,7 @@ namespace Axoom.Extensions.Logging.Console
 
             var hiddenAssemblies =
                 (ICollection<Assembly>) typeof(LogManager).GetField("_hiddenAssemblies", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-            
+
             hiddenAssemblies.Should().Contain(Assembly.Load(new AssemblyName("Axoom.Extensions.Logging.Console")));
         }
     }

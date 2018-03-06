@@ -23,7 +23,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
 
@@ -37,7 +37,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
 
@@ -51,7 +51,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
 
@@ -65,7 +65,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
 
@@ -79,7 +79,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
 
@@ -93,7 +93,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
 
@@ -107,7 +107,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
 
             string output = _layout.Render(logEventInfo);
 
-            output.ShouldBeEquivalentTo(
+            output.Should().Be(
                 $"{logEventInfo.TimeStamp.ToUniversalTime():O} | {logEventInfo.Level.Name.ToUpperInvariant().PadRight(5)} | {logEventInfo.LoggerName} |  | {logEventInfo.FormattedMessage}");
         }
     }
