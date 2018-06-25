@@ -55,14 +55,18 @@ __Limitations__:
 At least for now, we only support custom fields provided in a `Dictionary<string, object>`, neither simple `string`s nor `Dictionary<string, string>`. 
 This is due to us seeing no valuable reason for supporting it in a JSON log-format.
 
-## Why is `GELF` the default logformat?
+## Why is `JSON` the default logformat?
 All AXOOM assets are running with docker. As we are collecting all logs in a centralized system, we need information about the running container which produces these logs. 
 
 And here comes the problem with plain logs:  
 Docker is not able to handle multi-line logs, e.g. if a log event contains a stackstrace, because it interprets each line as a new log event.
-Therefore we've decided to produce json logs. To have a minimum set of information per log event we have decided to use the **Graylog Extended Log Format** ([GELF](http://docs.graylog.org/en/2.3/pages/gelf.html))
+Therefore we've decided to produce json logs.
 
 For development purposes you can switch the format to `Plain`.
+
+## Why is `GELF` deprecated?
+Log collector applications like _fluentd_ already come with GELF plugins, these have additional work, if GELF fields are already in place.
+This is why we keep on doing JSON but stop using GELF output.
 
 ## Troubleshooting
 
