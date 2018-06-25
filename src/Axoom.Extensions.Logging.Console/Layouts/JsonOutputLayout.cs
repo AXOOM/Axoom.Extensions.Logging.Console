@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
@@ -9,29 +8,26 @@ using NLog.Layouts;
 
 namespace Axoom.Extensions.Logging.Console.Layouts
 {
-    internal class GelfLayout : JsonLayout
+    public class JsonOutputLayout : JsonLayout
     {
-        public GelfLayout()
+        public JsonOutputLayout()
         {
             IncludeMdc = false;
             IncludeMdlc = false;
             IncludeAllProperties = false;
             RenderEmptyObject = false;
             SuppressSpaces = true;
-            
-            Attributes.Add(new JsonAttribute("version", "1.1"));
-            Attributes.Add(new JsonAttribute("timestamp", LayoutFormats.TIMESTAMP_UNIX, encode: false));
-            Attributes.Add(new JsonAttribute("host", Environment.MachineName));
-            Attributes.Add(new JsonAttribute("short_message", LayoutFormats.MESSAGE));
-            Attributes.Add(new JsonAttribute("full_message", LayoutFormats.MESSAGE_WITH_EXCEPTION));
+
+            Attributes.Add(new JsonAttribute("message", LayoutFormats.MESSAGE));
             Attributes.Add(new JsonAttribute("level", LayoutFormats.SYS_LOGLEVEL, encode: false));
-            Attributes.Add(new JsonAttribute("_timestamp_iso_8601", LayoutFormats.TIMESTAMP_ISO8601));
-            Attributes.Add(new JsonAttribute("_loglevel", LayoutFormats.LOGLEVEL));
-            Attributes.Add(new JsonAttribute("_logger", LayoutFormats.LOGGER));
-            Attributes.Add(new JsonAttribute("_callsite", LayoutFormats.CALLSITE));
-            Attributes.Add(new JsonAttribute("_exception_type", LayoutFormats.EXCEPTION_TYPE));
-            Attributes.Add(new JsonAttribute("_exception_message", LayoutFormats.EXCEPTION_MESSAGE));
-            Attributes.Add(new JsonAttribute("_exception_stacktrace", LayoutFormats.EXCEPTION_STACKTRACE, encode: true));
+            Attributes.Add(new JsonAttribute("timestamp_unix", LayoutFormats.TIMESTAMP_UNIX, encode: false));
+            Attributes.Add(new JsonAttribute("timestamp_iso8601", LayoutFormats.TIMESTAMP_ISO8601));
+            Attributes.Add(new JsonAttribute("loglevel", LayoutFormats.LOGLEVEL));
+            Attributes.Add(new JsonAttribute("logger", LayoutFormats.LOGGER));
+            Attributes.Add(new JsonAttribute("callsite", LayoutFormats.CALLSITE));
+            Attributes.Add(new JsonAttribute("exception_type", LayoutFormats.EXCEPTION_TYPE));
+            Attributes.Add(new JsonAttribute("exception_message", LayoutFormats.EXCEPTION_MESSAGE));
+            Attributes.Add(new JsonAttribute("exception_stacktrace", LayoutFormats.EXCEPTION_STACKTRACE, encode: true));
         }
 
         protected override void RenderFormattedMessage(LogEventInfo logEvent, StringBuilder target)
@@ -45,22 +41,11 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             JObject jObject = JObject.Parse(target.ToString());
             foreach ((string fieldName, object value) in GetScopeFields())
             {
-                jObject.Add(fieldName, JToken.FromObject(value));
+                jObject.Add(fieldName.ToSnakeCase(), JToken.FromObject(value));
             }
-
-            DeduplicateMessage(jObject);
 
             target.Clear();
             target.Append(jObject.ToString(Formatting.None));
-        }
-
-        private static void DeduplicateMessage(JObject jObject)
-        {
-            JToken shortMessage = jObject.SelectToken("short_message");
-            JToken fullMessage = jObject.SelectToken("full_message");
-            
-            if (shortMessage.Value<string>().Equals(fullMessage.Value<string>()))
-                jObject.Remove(fullMessage.Path);
         }
 
         private static Dictionary<string, object> GetScopeFields()
@@ -77,7 +62,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         {
             foreach (string fieldName in MappedDiagnosticsLogicalContext.GetNames())
             {
-                additionalFields[fieldName.ToSnakeCase().EnsureLeadingUnderscore()] = MappedDiagnosticsLogicalContext.GetObject(fieldName);
+                additionalFields[fieldName.ToSnakeCase()] = MappedDiagnosticsLogicalContext.GetObject(fieldName);
             }
         }
 
@@ -86,7 +71,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
             foreach (Dictionary<string, object> dict in NestedDiagnosticsLogicalContext.GetAllObjects().OfType<Dictionary<string, object>>())
             foreach ((string fieldName, object value) in dict)
             {
-                additionalFields[fieldName.ToSnakeCase().EnsureLeadingUnderscore()] = value;
+                additionalFields[fieldName.ToSnakeCase()] = value;
             }
         }
     }

@@ -10,9 +10,19 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void GettingLayoutForGelfReturnsGelfLayout()
         {
+#pragma warning disable 618
             var layout = LogFormat.Gelf.GetLayout();
+#pragma warning restore 618
 
             layout.Should().BeOfType<GelfLayout>();
+        }
+        
+        [Fact]
+        public void GettingLayoutForJsonReturnsJsonLayout()
+        {
+            var layout = LogFormat.Json.GetLayout();
+
+            layout.Should().BeOfType<JsonOutputLayout>();
         }
 
         [Fact]

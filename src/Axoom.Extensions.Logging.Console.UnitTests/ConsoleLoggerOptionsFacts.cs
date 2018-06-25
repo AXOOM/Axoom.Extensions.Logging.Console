@@ -90,7 +90,7 @@ namespace Axoom.Extensions.Logging.Console
             loadingOptions.Should().NotThrow<InvalidOperationException>();
         }
 
-        private static IConfiguration BuildConfiguration(LogFormat logFormat = LogFormat.Gelf, bool logAsync = true, bool includeScopes = false)
+        private static IConfiguration BuildConfiguration(LogFormat logFormat = LogFormat.Json, bool logAsync = true, bool includeScopes = false)
             => new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {

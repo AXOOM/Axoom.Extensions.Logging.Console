@@ -18,7 +18,7 @@ namespace Axoom.Extensions.Logging.Console
             IncludeScopes = ReadIncludeScopesOption(configuration);
         }
 
-        public LogFormat Format { get; set; } = LogFormat.Gelf;
+        public LogFormat Format { get; set; } = LogFormat.Json;
         public bool Async { get; set; } = true;
         public bool IncludeScopes { get; set; }
 

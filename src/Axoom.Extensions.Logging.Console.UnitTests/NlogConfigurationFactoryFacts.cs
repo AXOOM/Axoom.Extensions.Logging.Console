@@ -19,12 +19,25 @@ namespace Axoom.Extensions.Logging.Console
         [Fact]
         public void CreatingWithGelfFormatSetsGelfLayout()
         {
+#pragma warning disable 618
             var options = CreateLoggerOptions(LogFormat.Gelf, async: false);
+#pragma warning restore 618
 
             var config = _factory.Create(options);
 
             var target = config.AllTargets.OfType<ColoredConsoleTarget>().First();
             target.Layout.Should().BeOfType<GelfLayout>();
+        }
+
+        [Fact]
+        public void CreatingWithJsonFormatSetsJsonLayout()
+        {
+            var options = CreateLoggerOptions(LogFormat.Json, async: false);
+
+            var config = _factory.Create(options);
+
+            var target = config.AllTargets.OfType<ColoredConsoleTarget>().First();
+            target.Layout.Should().BeOfType<JsonOutputLayout>();
         }
 
         [Fact]

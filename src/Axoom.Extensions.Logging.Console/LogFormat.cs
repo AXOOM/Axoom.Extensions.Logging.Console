@@ -1,8 +1,12 @@
-﻿namespace Axoom.Extensions.Logging.Console
+﻿using System;
+
+namespace Axoom.Extensions.Logging.Console
 {
     public enum LogFormat
     {
-        Gelf,
-        Plain
+        Plain,
+        Json,
+        [Obsolete("Use JsonOutputLayout instead")]
+        Gelf
     }
 }

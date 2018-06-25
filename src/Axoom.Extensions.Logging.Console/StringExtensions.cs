@@ -8,11 +8,10 @@ namespace Axoom.Extensions.Logging.Console
         {
             return string.Concat(str.Where(@char => char.IsLetterOrDigit(@char) || @char.Equals('_'))
                                     .Select((@char, i) => i > 0 && char.IsUpper(@char) ? "_" + @char.ToString() : @char.ToString()))
-                         .ToLowerInvariant()
-                         .EnsureLeadingUnderscore();
+                         .ToLowerInvariant();
         }
 
-        private static string EnsureLeadingUnderscore(this string str)
+        public static string EnsureLeadingUnderscore(this string str)
         {
             if (!str.StartsWith("_"))
                 return "_" + str;
