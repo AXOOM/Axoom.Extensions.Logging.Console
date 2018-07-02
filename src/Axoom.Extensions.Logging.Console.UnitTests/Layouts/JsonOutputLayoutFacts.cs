@@ -102,22 +102,6 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         }
 
         [Fact]
-        public void AddedScopeFieldNamesAreConvertedToLower()
-        {
-            var layout = new JsonOutputLayout();
-            MappedDiagnosticsLogicalContext.Set("AField", 4711);
-            MappedDiagnosticsLogicalContext.Set("Another Field", 4711);
-            MappedDiagnosticsLogicalContext.Set("missing_leading_underscore", 4711);
-
-            string rendered = layout.Render(new LogEventInfo(LogLevel.Info, "logger", "message"));
-
-            var logLine = JsonConvert.DeserializeObject<JObject>(rendered);
-            logLine.SelectToken("a_field").Should().NotBeNull();
-            logLine.SelectToken("another_field").Should().NotBeNull();
-            logLine.SelectToken("missing_leading_underscore").Should().NotBeNull();
-        }
-
-        [Fact]
         public void StringObjectDictionaryScopeIsSupported()
         {
             var debugTarget = CreateDebuggableLogger(includeScopes: true, logger: out var logger);
@@ -127,7 +111,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
                 logger.LogInformation("test");
             }
 
-            debugTarget.LastMessage.Should().Contain("\"my_field\":\"value\"");
+            debugTarget.LastMessage.Should().Contain("\"myField\":\"value\"");
         }
 
         private static DebugTarget CreateDebuggableLogger(bool includeScopes, out ILogger logger)

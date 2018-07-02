@@ -6,17 +6,7 @@ using Xunit;
 namespace Axoom.Extensions.Logging.Console
 {
     public class LogFormatExtensionsFacts
-    {
-        [Fact]
-        public void GettingLayoutForGelfReturnsGelfLayout()
-        {
-#pragma warning disable 618
-            var layout = LogFormat.Gelf.GetLayout();
-#pragma warning restore 618
-
-            layout.Should().BeOfType<GelfLayout>();
-        }
-        
+    {   
         [Fact]
         public void GettingLayoutForJsonReturnsJsonLayout()
         {
