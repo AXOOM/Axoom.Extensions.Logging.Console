@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -64,7 +64,7 @@ namespace Axoom.Extensions.Logging.Console.Layouts
         {
             string output = _layout.Render(_logEventInfo);
 
-            var property = GetProperty(output, "level");
+            var property = GetProperty(output, "syslog_level");
             property.Value.Value<int>()
                     .Should()
                     .BeOneOf(SysLogLevelLayoutRenderer.SYSLOG_CRITICAL,
