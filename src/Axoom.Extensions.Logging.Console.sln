@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 15.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axoom.Extensions.Logging.Console", "Axoom.Extensions.Logging.Console\Axoom.Extensions.Logging.Console.csproj", "{DC9C9DF7-665E-4E5F-A904-2036AE5E79A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "Library\Library.csproj", "{DC9C9DF7-665E-4E5F-A904-2036AE5E79A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axoom.Extensions.Logging.Console.UnitTests", "Axoom.Extensions.Logging.Console.UnitTests\Axoom.Extensions.Logging.Console.UnitTests.csproj", "{F709D42E-FD0A-467B-957E-C65768A537BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F709D42E-FD0A-467B-957E-C65768A537BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__docs", "__docs", "{A002E820-D264-41D0-8781-B08256E940B0}"
 ProjectSection(SolutionItems) = preProject
