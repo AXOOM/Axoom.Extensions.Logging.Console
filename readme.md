@@ -1,7 +1,7 @@
 # Axoom.Extensions.Logging.Console
 [![Build status](https://ci.appveyor.com/api/projects/status/ot8g4686o3lxt0y2?svg=true)](https://ci.appveyor.com/project/AXOOM/axoom-extensions-logging-console)
 
-This library is meant to be used for logging purposes on the AXOOM Platform and sends log output to the console (stdout).
+This library provides asynchronous JSON-formatted console/stdout logging for .NET Core.
 
 It uses [NLog.Extensions.Logging](https://github.com/NLog/NLog.Extensions.Logging) as logprovider for `Microsoft.Extensions.Logging` and extends it with:
 

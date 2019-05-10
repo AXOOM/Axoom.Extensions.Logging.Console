@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>This library is meant to be used for logging purposes on the AXOOM Platform and sends log output to the console (stdout).</Description>
+    <Description>Asynchronous JSON-formatted console/stdout logging for .NET Core.</Description>
     <Authors>AXOOM GmbH</Authors>
     <Company>AXOOM GmbH</Company>
     <Copyright>Copyright (c) AXOOM GmbH</Copyright>
