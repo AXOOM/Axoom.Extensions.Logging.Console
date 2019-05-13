@@ -1,5 +1,7 @@
 # Axoom.Extensions.Logging.Console
-[![Build status](https://ci.appveyor.com/api/projects/status/ot8g4686o3lxt0y2?svg=true)](https://ci.appveyor.com/project/AXOOM/axoom-extensions-logging-console)
+
+[![NuGet package](https://img.shields.io/nuget/v/Axoom.Extensions.Logging.Console.svg)](https://www.nuget.org/packages/Axoom.Extensions.Logging.Console/)
+[![Build status](https://img.shields.io/appveyor/ci/AXOOM/axoom-extensions-logging-console.svg)](https://ci.appveyor.com/project/AXOOM/axoom-extensions-logging-console)
 
 This library provides asynchronous JSON-formatted console/stdout logging for .NET Core.
 
