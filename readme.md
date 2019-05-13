@@ -23,14 +23,15 @@ dotnet add package Axoom.Extensions.Logging.Console
 # How to use it
 General usage of the Microsoft Logging Framework: [Introduction to Logging in .NETCore](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging)   
 
-To use the AXOOM logging provider call the provider's extension method on an instance of `ILoggerFactory` or `ILoggingBuilder`, as shown in the following example:
+To use the AXOOM logging provider call the provider's extension method on an instance of `ILoggerFactory` or `ILoggingBuilder`. You can use it in your `Program.cs` code like this:
 
-```
-public void ConfigureLogging(IServiceProvider serviceProvider)
-{
-    var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-    loggerFactory.AddAxoomConsole(new ConsoleLoggerOptions());
-}
+```c#
+WebHost.CreateDefaultBuilder()
+       .ConfigureLogging((context, builder) =>
+           builder.ClearProviders() // remove default console logger
+                  .AddAxoomConsole(context.Configuration.GetSection("Logging"));
+        // ...
+       .Build();
 ```
 
 ## Configuration
